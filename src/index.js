@@ -1,16 +1,36 @@
 import 'babel-polyfill'
-import React from 'react'
+import React, { Component, PropTypes  } from 'react'
 import ReactDOM from 'react-dom'
-import App from './containers/App'
+import App from './components/App'
+import configureStore from './store/configureStore'
+import { Provider } from 'react-redux'
 
- ReactDOM.render(
-  <App />,
-  document.getElementById('root')
+// import { configureStore } from './store/configureStore';
+
+
+// const persistedState = loadState();
+// const store = configureStore(persistedState);
+
+// store.subscribe(() => {
+//   saveState(store.getState());
+// });
+const store = configureStore();
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app')
 );
 
 if (module.hot) {
-  module.hot.accept('./containers/App', () => {
-    const App = require('./containers/App').default;
-    ReactDOM.render(<App/>, document.getElementById('root'));
+  module.hot.accept('./components/App', () => {
+    const App = require('./components/App').default;
+    ReactDOM.render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+      document.getElementById('app')
+    );
   });
 }

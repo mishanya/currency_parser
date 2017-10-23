@@ -1,8 +1,11 @@
-const path = require("path");
-const webpack = require("webpack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path               = require("path");
+const webpack            = require("webpack");
+const HtmlWebpackPlugin  = require("html-webpack-plugin");
 const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
+const  devFlagPlugin     = new webpack.DefinePlugin({
+  __DEV__: JSON.stringify(JSON.parse(process.env.DEBUG || 'false'))
+});
 
 module.exports = {
   entry:
@@ -24,7 +27,7 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         loader: 'babel-loader',
-        exclude: "/node_modules/",
+        exclude: /(node_modules)/,
         query: {
           presets: ["react"]
         }
@@ -32,6 +35,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
       template: "./index.html",
       inject: "head"
@@ -40,7 +44,8 @@ module.exports = {
       defer: [],
       defaultAttribute: 'defer'
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    devFlagPlugin
   ],
   output: {
     filename: "[name].bundle.js",
