@@ -1,9 +1,10 @@
 import 'babel-polyfill'
 import React, { Component, PropTypes  } from 'react'
-import ReactDOM from 'react-dom'
-import App from './components/App'
+import ReactDOM, { render } from 'react-dom'
+import App from './containers/App'
 import configureStore from './store/configureStore'
 import { Provider } from 'react-redux'
+// import * as currencyActions from './actions/index'
 
 // import { configureStore } from './store/configureStore';
 
@@ -14,9 +15,10 @@ import { Provider } from 'react-redux'
 // store.subscribe(() => {
 //   saveState(store.getState());
 // });
+
 const store = configureStore();
 
-ReactDOM.render(
+render(
   <Provider store={store}>
     <App />
   </Provider>,
@@ -24,8 +26,8 @@ ReactDOM.render(
 );
 
 if (module.hot) {
-  module.hot.accept('./components/App', () => {
-    const App = require('./components/App').default;
+  module.hot.accept('./containers/App', () => {
+    const App = require('./containers/App').default;
     ReactDOM.render(
       <Provider store={store}>
         <App />

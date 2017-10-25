@@ -1,9 +1,8 @@
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import rootReducer from '../reducers'
-import DevTools from '../utils/DeveloperTools';
 
 export default function configureStore(initialState) {
-  const store = createStore(rootReducer, initialState)
+  const store = createStore(rootReducer, initialState);
 
   if (module.hot) {
     module.hot.accept('../reducers', () => {
