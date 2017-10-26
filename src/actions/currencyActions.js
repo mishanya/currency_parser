@@ -68,14 +68,18 @@ export function failedUpdate(currency, result){
 
 export function gotUpdate(currency, result){
 
-  return  (dispatch) => {
+  return  (dispatch, getState) => {
     dispatch({
       type: 'GOT_RATE',
       payload: currency,
       rate: result
     })
     setTimeout(() => {
-      dispatch(updateRate(currency));
+      if (getState().updatingCurrencies.length > 0) {
+        dispatch(updateRate(currency));
+      } else {
+        return
+      }
     }, 10000)
   }
 }
