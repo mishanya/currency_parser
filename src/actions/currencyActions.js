@@ -30,8 +30,9 @@ export function updateRate(currency){
         response =>  response.json(),
         error => {dispatch(failedUpdate(currency, error))}
       ).then(json => {
-        if (json == undefined) {
-          return
+        if (json.query == undefined) {
+          dispatch(failedUpdate(currency, `JSON.query: ${json.query}`))
+          return;
         }
         let rate = json.query.results.rate.Bid;
         dispatch(gotUpdate(currency, rate));
@@ -51,6 +52,7 @@ export function failedUpdate(currency, result){
   return {
     type: 'UPDATE_FAIL',
     payload: currency,
+    rate: 'Error'
   }
 }
 

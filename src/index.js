@@ -1,12 +1,16 @@
-import 'babel-polyfill'
 import React, { Component, PropTypes  } from 'react'
 import ReactDOM, { render } from 'react-dom'
 import App from './containers/App'
 import configureStore from './store/configureStore'
 import { Provider } from 'react-redux'
+import {loadState, saveState} from './store/localStorage'
 
+const persistedState = loadState(),
+store                = configureStore(persistedState);
 
-const store = configureStore();
+store.subscribe(() => {
+  saveState(store.getState());
+});
 
 render(
   <Provider store={store}>

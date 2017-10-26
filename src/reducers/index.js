@@ -30,10 +30,13 @@ initialState = {
 };
 
 export default function currencies(state = initialState, action) {
+  console.log(state);
   var thisCurrency      = state.currencies.find(currency => currency.id ==  action.payload),
-  thisCurrencyIndex     = state.currencies.indexOf(thisCurrency),
-  thisUpdatingCurrency  = state.updatingCurrencies.find(currency => currency.id ==  action.payload),
-  updatingCurrencyIndex = state.updatingCurrencies.indexOf(thisUpdatingCurrency);
+  thisCurrencyIndex     = state.currencies.indexOf(thisCurrency);
+  if (state.updatingCurrencies) {
+    var thisUpdatingCurrency  = state.updatingCurrencies.find(currency => currency.id ==  action.payload),
+    updatingCurrencyIndex     = state.updatingCurrencies.indexOf(thisUpdatingCurrency);
+  }
 
   switch (action.type) {
     case 'ADD_CURRENCY':
@@ -85,6 +88,8 @@ export default function currencies(state = initialState, action) {
             [updatingCurrencyIndex]: {
               isUpdating: {
                 $set: false
+              }, rate: {
+                $set: action.raate
               }
             }
           }
