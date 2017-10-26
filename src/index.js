@@ -4,17 +4,7 @@ import ReactDOM, { render } from 'react-dom'
 import App from './containers/App'
 import configureStore from './store/configureStore'
 import { Provider } from 'react-redux'
-// import * as currencyActions from './actions/index'
 
-// import { configureStore } from './store/configureStore';
-
-
-// const persistedState = loadState();
-// const store = configureStore(persistedState);
-
-// store.subscribe(() => {
-//   saveState(store.getState());
-// });
 
 const store = configureStore();
 

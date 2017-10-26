@@ -1,21 +1,25 @@
 import React, { Component }   from 'react'
 import { connect }            from 'react-redux'
 import { bindActionCreators } from 'redux'
-import DropdownSelect         from '../components/DropdownSelect'
+import CurrencySelect         from '../components/CurrencySelect'
 import CurrencyList           from '../components/CurrencyList'
 import * as currencyActions   from '../actions/currencyActions'
 
+
 class App extends Component {
 
-
   render() {
+    const {addCurrency, updateRate}        = this.props.currencyActions;
+    const {currencies, updatingCurrencies} = this.props;
     return (
       <div className="ui equal width center aligned padded grid">
         <h1 className="sixteen wide column">Currency rates parser</h1>
-        <DropdownSelect
-          currencies       = {this.props.currencies}
-          addCurrency      = {this.props.currencyActions} />
-        <CurrencyList />
+        <CurrencySelect
+          currencies         = {currencies}
+          addCurrency        = {addCurrency} />
+        <CurrencyList
+          updatingCurrencies = {updatingCurrencies}
+          updateRate         = {updateRate} />
       </div>
     )
   }
@@ -29,12 +33,12 @@ class App extends Component {
   };
 }
 
-
-
 function mapStateToProps (state) {
   return {
-    currencies:  state.currencies,
-    addCurrency: state.addCurrency
+    currencies:         state.currencies,
+    updatingCurrencies: state.updatingCurrencies,
+    addCurrency:        state.addCurrency,
+    updateRate:         state.updateRate
   }
 }
 

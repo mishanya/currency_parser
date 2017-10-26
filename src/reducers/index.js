@@ -1,53 +1,94 @@
-import * as types from '../constants/ActionTypes';
 import omit from 'lodash';
 import assign from 'lodash';
 import mapValues from 'lodash';
-import { combineReducers } from 'redux';
-import * as currencyActions from '../actions/currencyActions'
+import update from 'react-addons-update';
 
-// const currencies = (state = [], someAction) => {
-//   switch (someAction.type) {
-//     case types.ADD_CURRENCY:
-//       return [ ...state, someAction.currency];
-//     default:
-//       return state;
-//   }
-// };
 
 const listOfCurrencies = [
   {
-    id: 'RUBUSD',
+    id: "USDRUB",
     rate: '',
     title: 'USD',
-    autoUpdate: false
+    isUpdating: false
   },
   {
-    id: 'RUBEUR',
+    id: "EURRUB",
     rate: '',
     title: 'EUR',
-    autoUpdate: false
+    isUpdating: false
   },
   {
-    id: 'RUBGBP',
+    id: "GBPRUB",
     rate: '',
     title: 'GBP',
-    autoUpdate: false
+    isUpdating: false
   }
 ],
+updatingCurrencies = [],
+
 initialState = {
-  currencies: listOfCurrencies,
-  updatingCurrencies: []
+  currencies:         listOfCurrencies,
+  updatingCurrencies: updatingCurrencies
 };
 
 
 
 
 export default function currencies(state = initialState, action) {
+  console.log(state, action.payload);
+  var thisCurrency      = state.currencies.find(currency => currency.id ==  action.payload),
+  thisCurrencyIndex     = state.currencies.indexOf(thisCurrency),
+  thisUpdatingCurrency  = state.updatingCurrencies.find(currency => currency.id ==  action.payload),
+  updatingCurrencyIndex = state.updatingCurrencies.indexOf(thisUpdatingCurrency);
 
   switch (action.type) {
     case 'ADD_CURRENCY':
-      return { ...state, updatingCurrencies: updatingCurrencies.push(action.payload)  }
+      return  update(state, {
+        currencies: {
+          $splice: [[thisCurrencyIndex, 1]]
+        }, updatingCurrencies: {
+            $push: [thisCurrency]
+          }
+        }
+      )
 
+    case 'START_GETTING_RATE':
+      console.log(thisUpdatingCurrency, updatingCurrencies, state.updatingCurrencies, state, updatingCurrencyIndex)
+      return  update(state, {
+          updatingCurrencies: {
+            [updatingCurrencyIndex]: {
+              isUpdating: {
+                $set: true
+              }
+            }
+          }
+        }
+      )
+    case 'GOT_RATE':
+      return  update(state, {
+          updatingCurrencies: {
+            [updatingCurrencyIndex]: {
+              rate: {
+                $set: action.rate
+              },
+              isUpdating: {
+                $set: false
+              }
+            }
+          }
+        }
+      )
+    case 'UPDATE_FAIL':
+      return update(state, {
+          updatingCurrencies: {
+            [updatingCurrencyIndex]: {
+              isUpdating: {
+                $set: false
+              }
+            }
+          }
+        }
+      )
     default:
       return state;
   }

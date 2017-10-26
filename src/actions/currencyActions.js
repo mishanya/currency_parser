@@ -1,35 +1,59 @@
-// import * as types from '../constants/ActionTypes';
-
-// export function updateRate(currency) {
-
-//   let urlAPI = `http://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.xchange where pair in ( "RUBUSD", "RUBEUR", "RUBGBP")&env=store://datatables.org/alltableswithkeys`;
-//   // return (dispatch) => {
-//   //   dispatch(updateRate(currency));
-
-//   $.ajax({
-//     url: urlAPI,
-//     jsonp: "callback",
-//     dataType: "jsonp",
-//     success: function (response) {
-//        console.log(JSON.stringify(response)); // server response
-//     }
-//   });
-//     // dispatch({
-//     //   currency: types.UPDATE_RATE,
-//     //   currency
-//     // });
-
-//   // }
-// }
-
+import request from 'axios';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
+import thunk  from 'redux-thunk';
+import * as reducers from '../reducers';
+import store from '../store/configureStore';
 
 
 
 export function addCurrency(currency) {
-  return {
-      type: 'ADD_CURRENCY',
+  return  (dispatch, getState) => {
+    dispatch({
+      type:    'ADD_CURRENCY',
       payload: currency
-    };
-
-    // dispatch(updatePrice(company))
+    });
+    dispatch(updateRate(currency));
+  }
 }
+
+
+export function updateRate(currency){
+
+  let urlAPI = `https://query.yahooapis.com/v1/public/yql?q=env 'store://datatables.org/alltableswithkeys'; select * from yahoo.finance.xchange where pair in ('${currency}')&format=json`;
+  return  (dispatch, getState) => {
+    dispatch(startGettingRate(currency));
+    return fetch(urlAPI)
+      .then(
+        response =>  response.json(),
+        error => {dispatch(failedUpdate(currency, error))}
+      ).then(json => {
+
+        let rate = json.query.results.rate.Bid;
+        dispatch(gotUpdate(currency, rate));
+      });
+  }
+}
+
+export function startGettingRate(currency){
+  return {
+    type: 'START_GETTING_RATE',
+    payload: currency
+  };
+}
+
+export function failedUpdate(currency, result){
+  console.log(`Such a respond: \n${result} \n: (`);
+  return {
+    type: 'UPDATE_FAIL',
+    payload: currency,
+  };
+}
+
+export function gotUpdate(currency, result){
+  return {
+    type: 'GOT_RATE',
+    payload: currency,
+    rate: result
+  };
+}
+
