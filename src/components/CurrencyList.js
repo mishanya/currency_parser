@@ -2,11 +2,6 @@ import React, { Component } from 'react'
 
 class CurrencyList extends Component {
 
-  componentDidMount(){
-
-
-  }
-
   onCurrencyUpdate(e) {
     let currency = e.target.getAttribute("data-value");
     this.props.updateRate(currency);

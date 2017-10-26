@@ -38,6 +38,3 @@ class CurrencySelect extends Component {
 }
 
 export default CurrencySelect;
-
-
-
