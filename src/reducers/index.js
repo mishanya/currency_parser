@@ -3,7 +3,6 @@ import assign from 'lodash';
 import mapValues from 'lodash';
 import update from 'react-addons-update';
 
-
 const listOfCurrencies = [
   {
     id: "USDRUB",
@@ -25,14 +24,10 @@ const listOfCurrencies = [
   }
 ],
 updatingCurrencies = [],
-
 initialState = {
   currencies:         listOfCurrencies,
   updatingCurrencies: updatingCurrencies
 };
-
-
-
 
 export default function currencies(state = initialState, action) {
   var thisCurrency      = state.currencies.find(currency => currency.id ==  action.payload),
@@ -50,7 +45,15 @@ export default function currencies(state = initialState, action) {
           }
         }
       )
-
+    case 'REMOVE_CURRENCY':
+      return  update(state, {
+        currencies: {
+          $push: [thisUpdatingCurrency]
+        }, updatingCurrencies: {
+            $splice: [[updatingCurrencyIndex, 1]]
+          }
+        }
+      )
     case 'START_GETTING_RATE':
       return  update(state, {
           updatingCurrencies: {
@@ -90,9 +93,4 @@ export default function currencies(state = initialState, action) {
     default:
       return state;
   }
-
 }
-
-// export default function currencies(state = initialState){
-//   return state;
-// }

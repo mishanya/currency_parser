@@ -4,9 +4,8 @@ import thunk  from 'redux-thunk';
 import * as reducers from '../reducers';
 import store from '../store/configureStore';
 
-
-
 export function addCurrency(currency) {
+  console.log(store);
   return  (dispatch, getState) => {
     dispatch({
       type:    'ADD_CURRENCY',
@@ -16,9 +15,14 @@ export function addCurrency(currency) {
   }
 }
 
+export function removeCurrency(currency){
+  return {
+    type: 'REMOVE_CURRENCY',
+    payload: currency
+  }
+}
 
 export function updateRate(currency){
-  console.log(currency)
   let urlAPI = `https://query.yahooapis.com/v1/public/yql?q=env 'store://datatables.org/alltableswithkeys'; select * from yahoo.finance.xchange where pair in ('${currency}')&format=json`;
   return  (dispatch, getState) => {
     dispatch(startGettingRate(currency));
@@ -27,7 +31,9 @@ export function updateRate(currency){
         response =>  response.json(),
         error => {dispatch(failedUpdate(currency, error))}
       ).then(json => {
-
+        if (json == undefined) {
+          return
+        }
         let rate = json.query.results.rate.Bid;
         dispatch(gotUpdate(currency, rate));
       });
@@ -56,4 +62,3 @@ export function gotUpdate(currency, result){
     rate: result
   };
 }
-

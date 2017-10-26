@@ -1,17 +1,25 @@
 import React, { Component } from 'react'
-// import { connect } from 'react-redux'
 
 class CurrencyList extends Component {
+
+  componentDidMount(){
+
+
+  }
 
   onCurrencyUpdate(e) {
     let currency = e.target.getAttribute("data-value");
     this.props.updateRate(currency);
   }
 
+  onCurrencyRemove(e) {
+    let currency = e.target.getAttribute("data-value");
+    this.props.removeCurrency(currency);
+  }
+
   render() {
-    let updatingCurrencies     = this.props.updatingCurrencies,
-    isFetchingData,
-    updatingCurrenciesList     = updatingCurrencies.map((currency) => {
+    let updatingCurrencies = this.props.updatingCurrencies,
+    updatingCurrenciesList = updatingCurrencies.map((currency) => {
       return(
         <div
           className = "sixteen wide column centered currency__unit ui centered grid"
@@ -20,11 +28,13 @@ class CurrencyList extends Component {
           <div className="currency__prop six wide column">{currency.rate}</div>
           <div className="currency__prop two wide column">
             <i  onClick    = {::this.onCurrencyUpdate}
-                data-value={currency.id}
-                className={`refresh icon currency__prop currency__prop_rotator ${currency.isUpdating == true ? 'animated' : ''}`}></i>
+                data-value = {currency.id}
+                className  = {`refresh icon currency__prop currency__prop_rotator ${currency.isUpdating == true ? 'animated' : ''}`}></i>
           </div>
           <div className="currency__prop two wide column">
-            <i className="trash icon currency__prop"></i>
+            <i  onClick    = {::this.onCurrencyRemove}
+                data-value ={currency.id}
+                className  ="trash icon currency__prop"></i>
           </div>
         </div>
       )
@@ -39,7 +49,5 @@ class CurrencyList extends Component {
     )
   }
 }
-
-
 
 export default CurrencyList

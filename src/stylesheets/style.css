@@ -24,6 +24,9 @@
   animation: rotating 2s linear infinite;
 }
 
+i{
+  cursor: pointer;
+}
 
 @-webkit-keyframes rotating /* Safari and Chrome */ {
   from {

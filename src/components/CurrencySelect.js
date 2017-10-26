@@ -1,42 +1,25 @@
 import PropTypes from 'prop-types'
 import React, {Component} from 'react'
-// import { connect } from 'react-redux'
-// import * as currencyActions from '../actions/currencyActions'
-
-// const mapStateToProps = (state) => {
-//   return {
-//     currencies: state.currencies
-//   }
-// }
-
-// const mapDispatchToProps = (dispatch) => ({
-//   onCurrencySelect(currency) {
-//     dispatch(selectCurrency(currency));
-//   }
-// });
 
 
 class CurrencySelect extends Component {
-
 
   onCurrencySelect(e) {
     let currency = e.target.getAttribute("data-value");
     this.props.addCurrency(currency);
   }
 
-
   render() {
-    const  currencies  = this.props.currencies,
-    currenciesList     = currencies.map((currency) => {
+    const  currencies = this.props.currencies,
+    currenciesList    = currencies.map((currency) => {
       return (
         <div
+          key        = {currencies.indexOf(currency)}
           className  = "sixteen wide column centered currency__unit" >
           <div
-            className="ui button"
+            className  = "ui button"
             data-value = {currency.id}
-            key        = {currencies.indexOf(currency)}
-            onClick    = {::this.onCurrencySelect}
-          >
+            onClick    = {::this.onCurrencySelect} >
             {currency.title}
           </div>
         </div>
@@ -53,8 +36,6 @@ class CurrencySelect extends Component {
     )
   }
 }
-
-
 
 export default CurrencySelect;
 
