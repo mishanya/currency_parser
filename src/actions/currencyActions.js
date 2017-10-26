@@ -27,11 +27,21 @@ export function updateRate(currency){
     dispatch(startGettingRate(currency));
     return fetch(urlAPI)
       .then(
-        response =>  response.json(),
-        error => {dispatch(failedUpdate(currency, error))}
+        response =>  {
+          try {
+            return response.json()
+          } catch (error){
+            dispatch(failedUpdate(currency, error));
+            return;
+          }
+        },
+        error => {
+          dispatch(failedUpdate(currency, error));
+          return;
+        }
       ).then(json => {
-        if (json.query == undefined) {
-          dispatch(failedUpdate(currency, `JSON.query: ${json.query}`))
+        if (json == undefined) {
+          dispatch(failedUpdate(currency, 'JSON is undefined'))
           return;
         }
         let rate = json.query.results.rate.Bid;

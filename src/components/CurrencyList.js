@@ -2,6 +2,14 @@ import React, { Component } from 'react'
 
 class CurrencyList extends Component {
 
+  componentDidMount(){
+    if (this.props.updatingCurrencies.length > 0 ) {
+      this.props.updatingCurrencies.map((currency) => {
+        this.props.updateRate(currency.id);
+      })
+    }
+  }
+
   onCurrencyUpdate(e) {
     let currency = e.target.getAttribute("data-value");
     this.props.updateRate(currency);
@@ -34,6 +42,7 @@ class CurrencyList extends Component {
         </div>
       )
     });
+
     return (
       <div className="eight wide column">
         <div id="currency-list" className="ui grid currency-list">
