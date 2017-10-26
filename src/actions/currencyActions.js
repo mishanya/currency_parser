@@ -18,7 +18,7 @@ export function addCurrency(currency) {
 
 
 export function updateRate(currency){
-
+  console.log(currency)
   let urlAPI = `https://query.yahooapis.com/v1/public/yql?q=env 'store://datatables.org/alltableswithkeys'; select * from yahoo.finance.xchange where pair in ('${currency}')&format=json`;
   return  (dispatch, getState) => {
     dispatch(startGettingRate(currency));

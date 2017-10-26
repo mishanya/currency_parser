@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 class CurrencyList extends Component {
 
   onCurrencyUpdate(e) {
-    let currency = e.target.parentNode.getAttribute("data-value");
+    let currency = e.target.getAttribute("data-value");
     this.props.updateRate(currency);
   }
 
@@ -14,14 +14,14 @@ class CurrencyList extends Component {
     updatingCurrenciesList     = updatingCurrencies.map((currency) => {
       return(
         <div
-          data-value={currency.id}
           className = "sixteen wide column centered currency__unit ui centered grid"
           key       = {updatingCurrencies.indexOf(currency)  }>
           <div className="currency__prop two wide column"> {currency.title} </div>
           <div className="currency__prop six wide column">{currency.rate}</div>
           <div className="currency__prop two wide column">
             <i  onClick    = {::this.onCurrencyUpdate}
-              className={`refresh icon currency__prop currency__prop_rotator ${currency.isUpdating == true ? 'animated' : ''}`}></i>
+                data-value={currency.id}
+                className={`refresh icon currency__prop currency__prop_rotator ${currency.isUpdating == true ? 'animated' : ''}`}></i>
           </div>
           <div className="currency__prop two wide column">
             <i className="trash icon currency__prop"></i>

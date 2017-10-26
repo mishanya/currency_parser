@@ -35,7 +35,6 @@ initialState = {
 
 
 export default function currencies(state = initialState, action) {
-  console.log(state, action.payload);
   var thisCurrency      = state.currencies.find(currency => currency.id ==  action.payload),
   thisCurrencyIndex     = state.currencies.indexOf(thisCurrency),
   thisUpdatingCurrency  = state.updatingCurrencies.find(currency => currency.id ==  action.payload),
@@ -53,7 +52,6 @@ export default function currencies(state = initialState, action) {
       )
 
     case 'START_GETTING_RATE':
-      console.log(thisUpdatingCurrency, updatingCurrencies, state.updatingCurrencies, state, updatingCurrencyIndex)
       return  update(state, {
           updatingCurrencies: {
             [updatingCurrencyIndex]: {
